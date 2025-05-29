@@ -3,10 +3,12 @@ const personas = [
   {
     nombre: "Juan Perez",
     edad: 18,
+    email: "juanPerez@gmail.com",
   },
   {
     nombre: "Maria Loza",
     edad: 21,
+    email: "mariaLoza@gmail.com",
   },
 ];
 
@@ -20,6 +22,9 @@ function agregarPersona() {
   const msgErrorEdad = document.querySelector("#msg-error-edad");
   //borramos el contenido del elemento
   msgErrorEdad.innerHTML = "";
+  
+  const msgErrorEmail = document.querySelector("#msg-error-email")
+  msgErrorEmail.innerHTML = "";
 
   //Obtenemos el input donde se ingresa el nombre
   const inputNombre = document.querySelector("#input-nombre");
@@ -27,12 +32,14 @@ function agregarPersona() {
   //Obtenemos el input donde se ingresa la edad
   const inputEdad = document.querySelector("#input-edad");
 
+  const inputEmail = document.querySelector("#input-email");
   //Creamos una variable que indica si el formulario tiene error
   //Inicialmente suponemos que el fomulario NO tiene error
   let hayError = false;
 
   //Obtenemos el valor del input y le quitamos los espacios del inicio y el final
   const nombre = inputNombre.value.trim();
+  const email = inputEmail.value.trim();
   //Validamos que si el valor del nombre esta vacio
   if (nombre === "") {
     //De ser asi, colocamos el mensaje de error al contenido del elemento para mostrar el error
@@ -56,6 +63,13 @@ function agregarPersona() {
     //Le asigamos el valor true indicando que el formulario tiene error
     hayError = true;
   }
+  if (email === ""){
+    msgErrorEmail.innerHTML = "Debe ingresar un email";
+    hayError = true;
+  } else if (!esEmailValido(email)) {
+    msgErrorEmail.innerHTML = "Debe ingresar un email válido";
+    hayError = true;
+  }
 
   //Si el formulario tiene algun error (valores invalidos)
   if (hayError) {
@@ -70,6 +84,7 @@ function agregarPersona() {
   const nuevaPersona = {
     nombre: nombre,
     edad: edad,
+    email: email,
   };
 
   //Ingresamos el nuevo objeto persona dentro del arreglo
@@ -77,6 +92,7 @@ function agregarPersona() {
   //Limpiamos los inputs
   inputNombre.value = "";
   inputEdad.value = "";
+  inputEmail.value = "";
 
   //Actualizamos la tabla de personas para reflejar los cambios en el arreglo
   actualizarLista();
@@ -134,9 +150,16 @@ function actualizarLista() {
       persona.nombre +
       "</td><td>" +
       persona.edad +
+      "</td><td>" +
+      persona.email +
       "</td></tr>";
   }
 
   //Al final se colocará el html que se generó dentro del contenido del <tbody>
   listaNombresHtml.innerHTML = html;
+}
+
+function esEmailValido(email){
+  const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  return regex.test(email);
 }
